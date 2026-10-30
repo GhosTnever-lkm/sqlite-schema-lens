@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sqlite-schema-lens"
+version = "0.1.0"
+description = "Read-only SQLite schema snapshots and deterministic comparisons"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "GhosTnever"}]
+keywords = ["sqlite", "schema", "comparison", "developer-tools", "cli"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.scripts]
+sqlite-schema-lens = "sqlite_schema_lens.cli:main"
+
+[project.urls]
+Repository = "https://github.com/GhosTnever-lkm/sqlite-schema-lens"
+
+[tool.setuptools.packages.find]
+where = ["src"]
