@@ -82,6 +82,22 @@ class LensTests(unittest.TestCase):
             with self.assertRaises(LensError):
                 read_snapshot(bad)
 
+    def test_empty_object_names_round_trip(self):
+        for kind, ddl in (
+            ("table", 'CREATE TABLE "" (x TEXT);'),
+            ("index", 'CREATE TABLE t (x TEXT); CREATE INDEX "" ON t(x);'),
+        ):
+            with self.subTest(kind=kind):
+                db = self.root / (kind + ".db")
+                with contextlib.closing(sqlite3.connect(db)) as con:
+                    con.executescript(ddl)
+                snapshot = self.root / (kind + ".json")
+                self.assertEqual(self.run_cli("snapshot", db, "--out", snapshot)[0], 0)
+                saved = read_snapshot(snapshot)
+                self.assertTrue(any(o["type"] == kind and o["name"] == "" for o in saved["objects"]))
+                self.assertTrue(compare(saved, saved)["equal"])
+                self.assertEqual(self.run_cli("compare", snapshot, snapshot)[0], 0)
+
     def test_does_not_overwrite_inputs_or_sidecars(self):
         before = self.db.read_bytes()
         self.assertEqual(self.run_cli("snapshot", self.db, "--out", self.db)[0], 2)

@@ -83,7 +83,7 @@ def _object_pairs(pairs):
 def _validate_item(item):
     if not isinstance(item, dict) or set(item) != {"type", "name", "tbl_name", "sql", "details"}:
         raise LensError("Snapshot contains an invalid schema object.")
-    if not isinstance(item["type"], str) or item["type"] not in TYPES or not isinstance(item["name"], str) or not item["name"] or not isinstance(item["tbl_name"], str):
+    if not isinstance(item["type"], str) or item["type"] not in TYPES or not isinstance(item["name"], str) or not isinstance(item["tbl_name"], str):
         raise LensError("Snapshot contains an invalid schema object identity.")
     if item["sql"] is not None and not isinstance(item["sql"], str):
         raise LensError("Snapshot contains an invalid SQL definition.")
